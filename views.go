@@ -23,7 +23,8 @@ func uploadFile(c *gin.Context) {
 	}
 	data, err := c.GetRawData()
 	if err != nil {
-		c.XML(http.StatusBadRequest, nil)
+		fmt.Printf("Error uploading : %s", err)
+		c.XML(http.StatusBadRequest, err.Error())
 		return
 	}
 	err = ioutil.WriteFile(objectPath, data, 0644)
@@ -58,6 +59,7 @@ func deleteObjects(c *gin.Context) {
 		for _, d := range dir {
 			err := os.RemoveAll(path.Join([]string{bucketPath, d.Name()}...))
 			if err != nil {
+				fmt.Printf("Failed to remove objects:%s", err)
 				c.XML(http.StatusInternalServerError, ErrorResponse{err.Error()})
 				return
 			}
@@ -117,6 +119,7 @@ func headBucket(c *gin.Context) {
 	if isDir(bucketPath) {
 		c.XML(http.StatusOK, "")
 	} else {
+		fmt.Print("can't find bucket")
 		c.XML(http.StatusConflict, "")
 	}
 }
