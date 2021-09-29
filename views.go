@@ -14,7 +14,7 @@ func uploadFile(c *gin.Context) {
 	bucket := c.Param("bucket")
 	object := c.Param("object")
 	objectSuffix := c.Param("objectSuffix")
-	objectPath := path.Join(BasicPath, bucket, object, objectSuffix)
+	objectPath := path.Join(CFG.BasicPath, bucket, object, objectSuffix)
 	objectDir := path.Dir(objectPath)
 	err := os.MkdirAll(objectDir, os.ModePerm)
 	if err != nil {
@@ -41,7 +41,7 @@ func deleteFile(c *gin.Context) {
 	bucket := c.Param("bucket")
 	object := c.Param("object")
 	//objectSuffix := c.Param("objectSuffix")
-	objectBasicDir := path.Join(BasicPath, bucket, object)
+	objectBasicDir := path.Join(CFG.BasicPath, bucket, object)
 	err := os.RemoveAll(objectBasicDir)
 	if err != nil {
 		c.XML(http.StatusInternalServerError, ErrorResponse{err.Error()})
@@ -55,7 +55,7 @@ func deleteObjects(c *gin.Context) {
 	bucket := c.Param("bucket")
 	_, del := c.GetQuery("delete")
 	if del {
-		bucketPath := path.Join(BasicPath, bucket)
+		bucketPath := path.Join(CFG.BasicPath, bucket)
 		dir, _ := ioutil.ReadDir(bucketPath)
 		for _, d := range dir {
 			err := os.RemoveAll(path.Join([]string{bucketPath, d.Name()}...))
@@ -75,7 +75,7 @@ func getFile(c *gin.Context) {
 	bucket := c.Param("bucket")
 	object := c.Param("object")
 	objectSuffix := c.Param("objectSuffix")
-	objectPath := path.Join(BasicPath, bucket, object, objectSuffix)
+	objectPath := path.Join(CFG.BasicPath, bucket, object, objectSuffix)
 	//fileInfo, err := os.Stat(objectPath)
 
 	data, err := os.Open(objectPath)
@@ -104,7 +104,7 @@ func getBucket(c *gin.Context) {
 		return
 	}
 
-	bucketPath := path.Join(BasicPath, bucket)
+	bucketPath := path.Join(CFG.BasicPath, bucket)
 	files, _ := ioutil.ReadDir(bucketPath)
 
 	var contents []Content
@@ -117,7 +117,7 @@ func getBucket(c *gin.Context) {
 
 func headBucket(c *gin.Context) {
 	bucket := c.Param("bucket")
-	bucketPath := path.Join(BasicPath, bucket)
+	bucketPath := path.Join(CFG.BasicPath, bucket)
 	if isDir(bucketPath) {
 		c.XML(http.StatusOK, "")
 	} else {
