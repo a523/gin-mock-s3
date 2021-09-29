@@ -23,3 +23,7 @@ type Content struct {
 	Etag         string    `xml:"Etag"`
 	Size         int64     `xml:"Size"`
 }
+
+type putObjectResponse struct {
+	Etag         string    `xml:"Etag"`
+}

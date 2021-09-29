@@ -32,7 +32,8 @@ func uploadFile(c *gin.Context) {
 		c.XML(http.StatusInternalServerError, ErrorResponse{err.Error()})
 		return
 	}
-	c.XML(http.StatusOK, nil)
+	md5 := getFileMd5(objectPath)
+	c.XML(http.StatusOK, putObjectResponse{Etag: md5})
 	return
 }
 
@@ -83,6 +84,7 @@ func getFile(c *gin.Context) {
 		c.XML(http.StatusInternalServerError, ErrorResponse{err.Error()})
 		return
 	}
+
 	extraHeaders := map[string]string{
 		"Last-Modified": fileInfo.ModTime().UTC().Format(http.TimeFormat),
 		"Content-Disposition": fmt.Sprintf(`attachment; filename="%s"; filename*=UTF-8''%s`,
