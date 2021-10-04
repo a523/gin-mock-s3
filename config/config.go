@@ -1,6 +1,7 @@
 package config
 
 import (
+	"fmt"
 	"os"
 )
 
@@ -44,6 +45,7 @@ func checkConf(cfg Config) {
 	if cfg.Driver != "local" && cfg.Driver != "s3" {
 		panic(`The config 'DRIVER' must be 'local' or 's3'`)
 	}
+	fmt.Printf("Run with [%s] driver\n", cfg.Driver)
 }
 
 func init() {
