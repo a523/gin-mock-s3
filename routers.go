@@ -7,7 +7,7 @@ import (
 )
 
 func setupRouter() *gin.Engine {
-	router := gin.Default()
+	router := gin.New()
 	router.MaxMultipartMemory = 8 << 20 // 8 MiB
 	if config.CFG.Driver == "local" {
 		router.GET("/:bucket/", getBucket)
